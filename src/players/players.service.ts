@@ -26,7 +26,7 @@ export class PlayersService {
 
   async update(_id: string, updatePlayerDto: UpdatePlayerDto): Promise<Player> {
     return await this.playerModel
-      .findOneAndUpdate({ _id }, { $set: updatePlayerDto })
+      .findOneAndUpdate({ _id }, { $set: updatePlayerDto }, { new: true })
       .exec();
   }
 
