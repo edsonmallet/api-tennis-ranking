@@ -3,6 +3,7 @@ import { CreatePlayerDto } from './dtos/create-player.dto';
 import { Player } from './interfaces/players.interfaces';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { UpdatePlayerDto } from './dtos/update-player-dto';
 
 @Injectable()
 export class PlayersService {
@@ -23,13 +24,13 @@ export class PlayersService {
     return await newPlayer.save();
   }
 
-  async update(_id: string, createPlayerDto: CreatePlayerDto): Promise<Player> {
+  async update(_id: string, updatePlayerDto: UpdatePlayerDto): Promise<Player> {
     return await this.playerModel
-      .findOneAndUpdate({ _id }, { $set: createPlayerDto })
+      .findOneAndUpdate({ _id }, { $set: updatePlayerDto })
       .exec();
   }
 
   async destroy(_id: string): Promise<any> {
-    return await this.playerModel.remove({ _id }).exec();
+    return await this.playerModel.deleteOne({ _id }).exec();
   }
 }

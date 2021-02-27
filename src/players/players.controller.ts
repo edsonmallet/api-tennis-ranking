@@ -6,9 +6,13 @@ import {
   Param,
   Post,
   Put,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreatePlayerDto } from './dtos/create-player.dto';
+import { UpdatePlayerDto } from './dtos/update-player-dto';
 import { Player } from './interfaces/players.interfaces';
+import { PlayersValidatorParameters } from './pipes/players-validator-parameters';
 import { PlayersService } from './players.service';
 
 @Controller('api/v1/players')
@@ -20,26 +24,34 @@ export class PlayersController {
     return await this.playersService.getAll();
   }
 
-  @Get(':id')
-  async getOne(@Param('id') id: string): Promise<Player> {
-    return await this.playersService.getOne(id);
+  @Get('/:_id')
+  @UsePipes(ValidationPipe)
+  async getOne(
+    @Param('_id', PlayersValidatorParameters) _id: string,
+  ): Promise<Player> {
+    return await this.playersService.getOne(_id);
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   async store(@Body() createPlayerDto: CreatePlayerDto): Promise<Player> {
     return await this.playersService.store(createPlayerDto);
   }
 
-  @Put(':id')
+  @Put('/:_id')
+  @UsePipes(ValidationPipe)
   async update(
-    @Param('id') id: string,
-    @Body() player: Player,
+    @Param('_id', PlayersValidatorParameters) _id: string,
+    @Body() updatePlayerDto: UpdatePlayerDto,
   ): Promise<Player> {
-    return await this.playersService.update(id, player);
+    return await this.playersService.update(_id, updatePlayerDto);
   }
 
-  @Delete(':id')
-  async destroy(@Param('id') id: string): Promise<Player> {
-    return await this.playersService.destroy(id);
+  @Delete('/:_id')
+  @UsePipes(ValidationPipe)
+  async destroy(
+    @Param('_id', PlayersValidatorParameters) _id: string,
+  ): Promise<Player> {
+    return await this.playersService.destroy(_id);
   }
 }
