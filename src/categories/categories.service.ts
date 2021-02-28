@@ -13,7 +13,7 @@ import { PlayersService } from '../players/players.service';
 @Injectable()
 export class CategoriesService {
   constructor(
-    @InjectModel('Category') private readonly categoryModel: Model<ICategory>,
+    @InjectModel('Categories') private readonly categoryModel: Model<ICategory>,
     private readonly playersService: PlayersService,
   ) {}
 

@@ -9,6 +9,7 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
+import { ParametersValidatorPipe } from 'src/common/pipes/parameters-validator.pipe';
 import { CategoriesService } from './categories.service';
 
 import { CreateCategoryDto } from './dtos/create-categories.dto';
@@ -33,7 +34,10 @@ export class CategoriesController {
   }
 
   @Get('/:_id')
-  async getOne(@Param('_id') _id: string): Promise<ICategory> {
+  @UsePipes(ValidationPipe)
+  async getOne(
+    @Param('_id', ParametersValidatorPipe) _id: string,
+  ): Promise<ICategory> {
     return await this.categoriesService.getOne(_id);
   }
 
@@ -41,13 +45,15 @@ export class CategoriesController {
   @UsePipes(ValidationPipe)
   async update(
     @Body() updateCategoryDto: UpdateCategoryDto,
-    @Param('_id') _id: string,
+    @Param('_id', ParametersValidatorPipe) _id: string,
   ): Promise<void> {
     await this.categoriesService.update(_id, updateCategoryDto);
   }
 
   @Delete('/:_id')
-  async destroy(@Param('_id') _id: string): Promise<any> {
+  async destroy(
+    @Param('_id', ParametersValidatorPipe) _id: string,
+  ): Promise<any> {
     return await this.categoriesService.destroy(_id);
   }
 
